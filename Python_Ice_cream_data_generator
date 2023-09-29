@@ -6,9 +6,18 @@ fake = Faker()
 
 # Define the number of rows (data points) in the tables
 num_rows = 365  # Assuming data for one year (365 days)
+num_locations = 3  # Number of locations
 
 # Create the Location Table
-location_data = [{'Location_ID': 1, 'Location_Name': fake.city(), 'Latitude': fake.latitude(), 'Longitude': fake.longitude()}]
+location_data = []
+for location_id in range(1, num_locations + 1):
+    location_data.append({
+        'Location_ID': location_id,
+        'Location_Name': fake.city(),
+        'Latitude': fake.latitude(),
+        'Longitude': fake.longitude()
+    })
+
 location_df = pd.DataFrame(location_data)
 
 # Create the Weather Data Table
@@ -17,7 +26,7 @@ for _ in range(num_rows):
     date = pd.Timestamp(fake.date_between(start_date='-1y', end_date='+1y'))
     temperature_C = round(random.uniform(10, 35), 2)  # Temperature in Celsius
     precipitation_mm = round(random.uniform(0, 20), 2)  # Precipitation in mm
-    location_id = 1  # Assuming all data is for the same location
+    location_id = random.randint(1, num_locations)  # Randomly assign a location ID
     weather_data.append({'Date': date, 'Temperature_C': temperature_C, 'Precipitation_mm': precipitation_mm, 'Location_ID': location_id})
 
 weather_df = pd.DataFrame(weather_data)
@@ -27,7 +36,7 @@ ice_cream_sales_data = []
 for _ in range(num_rows):
     date = pd.Timestamp(fake.date_between(start_date='-1y', end_date='+1y'))
     total_sales_units = random.randint(10, 200)  # Ice cream sales in units
-    location_id = 1  # Assuming all data is for the same location
+    location_id = random.randint(1, num_locations)  # Randomly assign a location ID
     ice_cream_sales_data.append({'Date': date, 'Total_Sales_Units': total_sales_units, 'Location_ID': location_id})
 
 ice_cream_sales_df = pd.DataFrame(ice_cream_sales_data)
