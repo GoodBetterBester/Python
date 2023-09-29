@@ -1,12 +1,19 @@
 import pandas as pd
 import random
 from faker import Faker
+from datetime import datetime, timedelta
 
 fake = Faker()
 
 # Define the number of rows (data points) in the tables
 num_rows = 365  # Assuming data for one year (365 days)
 num_locations = 3  # Number of locations
+
+# Calculate today's date
+today = datetime.now().date()
+
+# Define the date range for data generation (e.g., within the past year)
+start_date = today - timedelta(days=365)  # 365 days ago
 
 # Create the Location Table
 location_data = []
@@ -23,7 +30,7 @@ location_df = pd.DataFrame(location_data)
 # Create the Weather Data Table
 weather_data = []
 for _ in range(num_rows):
-    date = pd.Timestamp(fake.date_between(start_date='-1y', end_date='+1y'))
+    date = fake.date_between(start_date=start_date, end_date=today)
     temperature_C = round(random.uniform(10, 35), 2)  # Temperature in Celsius
     precipitation_mm = round(random.uniform(0, 20), 2)  # Precipitation in mm
     location_id = random.randint(1, num_locations)  # Randomly assign a location ID
@@ -34,7 +41,7 @@ weather_df = pd.DataFrame(weather_data)
 # Create the Ice Cream Sales Table
 ice_cream_sales_data = []
 for _ in range(num_rows):
-    date = pd.Timestamp(fake.date_between(start_date='-1y', end_date='+1y'))
+    date = fake.date_between(start_date=start_date, end_date=today)
     total_sales_units = random.randint(10, 200)  # Ice cream sales in units
     location_id = random.randint(1, num_locations)  # Randomly assign a location ID
     ice_cream_sales_data.append({'Date': date, 'Total_Sales_Units': total_sales_units, 'Location_ID': location_id})
